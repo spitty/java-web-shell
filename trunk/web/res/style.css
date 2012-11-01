@@ -1,0 +1,11 @@
+body{
+	background-color: black;
+	font-family: courier;
+	color: white;
+}
+input{
+	background-color: black;
+	color: white;
+	font-family: courier;
+	border: none;
+}
