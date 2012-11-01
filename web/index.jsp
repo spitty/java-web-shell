@@ -8,10 +8,15 @@
 <!DOCTYPE html>
 <html>
     <head>
+<link rel='stylesheet' type='text/css' href='res/style.css'>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <div>
+			<div id="row_1">
+				> <input id="query" autofocus size="100">
+			</div>
+		</div>
     </body>
 </html>
