@@ -15,7 +15,7 @@
     <body>
         <div>
 			<div id="row_1">
-				<input id="query" autofocus size="100">
+				> <input id="query" autofocus size="100">
 			</div>
 		</div>
     </body>
