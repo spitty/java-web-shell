@@ -3,10 +3,16 @@ body{
 	font-family: courier;
 	color: white;
 }
+
 input{
 	background-color: black;
 	color: white;
 	font-family: courier;
 	border: none;
 	outline: none;
+}
+
+#priv_indicator{
+	padding-right: 10px;
+	float: left;
 }
