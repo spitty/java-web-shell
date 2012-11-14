@@ -7,17 +7,22 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<head>
-<link rel='stylesheet' type='text/css' href='res/style.css'>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>JSP Page</title>
-</head>
-<body>
-	<div>
-		<div id="row_1">
-			<div id="priv_indicator">></div>
-			<input id="query" autofocus size="100">
-		</div>
-	</div>
-</body>
+	<head>
+		<link rel='stylesheet' type='text/css' href='res/style.css'>
+		<script type='text/javascript' src='res/jquery.js'></script>
+		<script type='text/javascript' src='res/all.js'></script>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Java WEB Shell</title>
+	</head>
+	<body>
+		<form onsubmit="execute(); return false;">
+			<div>
+				<div id="rows">
+					<div id="results"></div>
+					<div id="priv_indicator">></div>
+					<input id="query" autofocus size="100">
+				</div>
+			</div>
+		</form>
+	</body>
 </html>
