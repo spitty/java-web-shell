@@ -43,7 +43,7 @@ function execute(){
 		default:
 			$.ajax({
 				type : 'POST',
-				url : '/ShellPostProcessor',
+				url : 'ShellPostProcessor',
 				cache : false,
 				data : {
 					query : query
@@ -60,7 +60,7 @@ function execute(){
 function echo(text, query){
 	if (!text) text="";
 	if (!query) query="";	
-	$("#results").append("<div class='result'>>"+text+"</div>");
+	$("#results").append("<div class='result'>> "+text+"</div>");
 	$("#query").val(query);
 }
 function tab(){
