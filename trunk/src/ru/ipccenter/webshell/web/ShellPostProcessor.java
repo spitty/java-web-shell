@@ -1,8 +1,12 @@
 package ru.ipccenter.webshell.web;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -61,7 +65,20 @@ public class ShellPostProcessor extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
+	    PrintWriter out = response.getWriter();
+	    response.setContentType("text/html");
+	    response.setHeader("Cache-control", "no-cache, no-store");
+	    response.setHeader("Pragma", "no-cache");
+	    response.setHeader("Expires", "-1");
+	    
+	    String query = request.getContentType();
+	    PrintStream o = new PrintStream(servletOutput);
+	    
+	    o.println(query);
+	    BufferedReader i = new BufferedReader(new InputStreamReader(servletInput));
+	    out.println(i.readLine());
+	    out.close();
 	}
 
 }
