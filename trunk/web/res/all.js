@@ -49,18 +49,21 @@ function execute(){
 					query : query
 				},
 				error : function () {
+					echo (query, null, '>');
 					echo("Connection error", query);
 				},
 				success : function (data) {
+					echo (query, null, '>');
 					echo (data);
 				}
 			});
 	}
 }
-function echo(text, query){
+function echo(text, query, delim){
 	if (!text) text="";
-	if (!query) query="";	
-	$("#results").append("<div class='result'>> "+text+"</div>");
+	if (!query) query="";
+	if (!delim) delim = "&nbsp;";
+	$("#results").append("<div class='result'>"+delim+" "+text+"</div>");
 	$("#query").val(query);
 }
 function tab(){
