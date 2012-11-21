@@ -2,7 +2,7 @@ body{
 	background-color: black;
 	font-family: courier;
 	color: white;
-	font-size: 12px;
+	font-size: 14px;
 }
 
 input{
@@ -11,7 +11,7 @@ input{
 	font-family: courier;
 	border: none;
 	outline: none;
-	font-size: 12px;
+	font-size: 14px;
 }
 
 #priv_indicator{
