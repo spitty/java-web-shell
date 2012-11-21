@@ -34,7 +34,7 @@ function execute(){
 	
 	switch(query){
 		case "":
-			echo();
+			echo(null, null, ">");
 			break;
 		case "clear":
 			echo();
