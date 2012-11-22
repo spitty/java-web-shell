@@ -11,6 +11,7 @@ import java.io.PrintStream;
 import java.util.regex.Pattern;
 
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.EcmaError;
 import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.Scriptable;
@@ -61,7 +62,16 @@ abstract class JSShell extends ScriptableObject {
     public void process(String source) {
 	
 	String[] sourceLines = SPLIT_PATTERN.split(source, 0);
-	StringBuilder code = new StringBuilder(source.length());
+	process(sourceLines);
+    }
+    
+    /**
+     * 
+     * @param source
+     */ 
+    public void process(String[] sourceLines) {
+	
+	StringBuilder code = new StringBuilder(sourceLines.length * 128);
 	try {
 	    for (String line: sourceLines) {
 		code.append(line);
@@ -71,12 +81,13 @@ abstract class JSShell extends ScriptableObject {
 	    }
 	
 	    Object result = context.evaluateString(this, code.toString(),
-		    "web-stdin: ", 0, null);
+		    "web-stdin: ", 0, null);  // WTF?
 	
 	    if (result != Context.getUndefinedValue()) {
 		stderr.println(Context.toString(result));
 	    };
-	    
+	} catch (EcmaError ee) {
+	    stderr.print(ee.getErrorMessage());
 	} catch (WrappedException we) {
 	    stderr.println(we.getWrappedException().toString());
 	} catch (EvaluatorException ee) {

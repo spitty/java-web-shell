@@ -48,7 +48,7 @@ abstract class JSGlobalObject extends JSShell {
 	
 	super.process(source);
     }
-
+    
     /**
      * 
      * @see ru.ipccenter.webshell.server.shell.JSShell#getClassName()
