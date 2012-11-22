@@ -43,7 +43,7 @@ function execute(){
 		default:
 			$.ajax({
 				type : 'POST',
-				url : 'ShellPostProcessor',
+				url : 'PostRequestManager',
 				cache : false,
 				data : {
 					query : query
@@ -63,7 +63,9 @@ function echo(text, query, delim){
 	if (!text) text="";
 	if (!query) query="";
 	if (!delim) delim = "&nbsp;";
-	$("#results").append("<div class='result'>"+delim+" "+text+"</div>");
+	if (text != "") {
+		$("#results").append("<div class='result'>"+delim+" "+text+"</div>");
+	}; 
 	$("#query").val(query);
 }
 function tab(){
