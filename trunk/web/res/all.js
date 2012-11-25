@@ -62,9 +62,12 @@ function execute(){
 function echo(text, query, delim){
 	if (!text) text="";
 	if (!query) query="";
-	if (!delim) delim = "&nbsp;";
+	if (!delim) 
+		delim = "";
+	else
+		delim = delim+" ";
 	if (text != "") {
-		$("#results").append("<div class='result'>"+delim+" "+text+"</div>");
+		$("#results").append("<div class='result'>"+delim+text+"</div>");
 	}; 
 	$("#query").val(query);
 }
