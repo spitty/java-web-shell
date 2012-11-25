@@ -11,13 +11,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 import ru.ipccenter.webshell.server.shell.io.OutputToInputStreamConverter;
+import ru.ipccenter.webshell.server.shell.io.WebPrintStream;
 
 
 /**
@@ -120,7 +120,35 @@ public class Shell extends JSGlobalObject {
     @Override
     final protected void cd(Object[] args) {
 
-	//TODO: cd() is empty.
+	if (args.length != 1) {
+	    stderr.println("Wrong number of arguments");
+	    return;
+	}
+	
+	String arg;
+	try {
+	    arg = (String) args[0];
+	    
+	} catch (ClassCastException e) {
+	    stderr.println("Wrong argument type");
+	    return;
+	}
+	
+	File newCurentDirectory;
+	if (arg.startsWith("/") || arg.startsWith("\\")) {
+	    newCurentDirectory = new File(arg);
+	} else {
+	    newCurentDirectory = new File(curentDirectory, arg);
+	}
+	
+	if (newCurentDirectory.isDirectory()) {
+	    curentDirectory = newCurentDirectory;
+	} else {
+	    stderr.print("\"");
+	    stderr.print(arg);
+	    stderr.print("\" ");
+	    stderr.println("is not a directory");
+	}
     }
 
     /**
@@ -129,9 +157,18 @@ public class Shell extends JSGlobalObject {
     @Override
     final protected String pwd(Object[] args) {
 
-	String curPath = curentDirectory.getAbsolutePath();
-	stdout.println(curPath);
-	return curPath;
+	String curPath;
+	try {
+	    curPath = curentDirectory.getCanonicalPath();
+	    /*
+	     * because returned string will be printed to stderr
+	     */
+	    //stdout.println(curPath); 
+	    return curPath;
+    	} catch (IOException e) {
+	    stderr.println(e.getMessage());
+	}
+	return "";
     }
 
     /**
@@ -139,16 +176,13 @@ public class Shell extends JSGlobalObject {
      */
     @Override
     final protected void print(Object[] args) {
-
 	for (int i=0; i < args.length; i++) {
-	    
 	    if (i > 0) {
-		System.out.print(" ");
-	    }
-
+		stdout.print(" ");
+    	    }
 	    stdout.print(Context.toString(args[i]));
-	};
-	System.out.println();
+	}
+	stdout.println();
     }
 
     /**
@@ -157,7 +191,22 @@ public class Shell extends JSGlobalObject {
     @Override
     final protected void help(Object[] args) {
 
-	// TODO help() is empty
+	stderr.println("+ help()");
+	stderr.println("Display usage and help messages.");
+//	stderr.println("load(['foo.js', ...])  Load JavaScript source files named by ");
+//	stderr.println("                       string arguments. ");
+	stderr.println("+ cd(path)");
+	stderr.println("Changes working directory.");
+	stderr.println("+ pwd()");
+	stderr.println("Prints working directory, returns working directory path");
+	stderr.println("+ print([expr ...])");
+	stderr.println("Evaluate and print expressions.");
+	stderr.println("+ read([path])");
+	stderr.println("Reads from path and redirects readed data to new Executable object.");
+	stderr.println("If no path, it reads data from standard input.");
+//	stderr.println("quit()                 Quit the shell. ");
+//	stderr.println("version([number])      Get or set the JavaScript version number.");
+	stderr.println();
     }
 
     /**
@@ -178,12 +227,14 @@ public class Shell extends JSGlobalObject {
 	output = new OutputToInputStreamConverter(PIPE_SIZE);
 	error  = new OutputToInputStreamConverter(PIPE_SIZE);
 	
-	stdout = new PrintStream(output.getOutput());
-	stderr = new PrintStream(error.getOutput());	
+	stdout = new WebPrintStream(output.getOutput());
+	stderr = new WebPrintStream(error.getOutput());	
 	
 	this.defineFunctionProperties(getBuiltinFuncts(),
 		JSGlobalObject.class, ScriptableObject.DONTENUM);
-	
+
 	//TODO: read and initialize environpent
+	//TODO: change base working directory
+	setCurentDir("/home/ivan");
     }
 }

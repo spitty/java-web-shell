@@ -7,7 +7,6 @@
  */
 package ru.ipccenter.webshell.server.shell;
 
-import java.io.PrintStream;
 import java.util.regex.Pattern;
 
 import org.mozilla.javascript.Context;
@@ -17,6 +16,8 @@ import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.WrappedException;
+
+import ru.ipccenter.webshell.server.shell.io.WebPrintStream;
 
 
 /**
@@ -32,8 +33,8 @@ abstract class JSShell extends ScriptableObject {
 		Pattern.compile("[\\r\\n]|\\n|\\r");
     
     protected Context context;
-    protected PrintStream  stdout;
-    protected PrintStream  stderr;
+    protected WebPrintStream  stdout;
+    protected WebPrintStream  stderr;
     
     /**
      * 
