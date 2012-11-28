@@ -7,11 +7,7 @@
  */
 package ru.ipccenter.webshell.server.shell.io;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import com.sun.grizzly.websockets.DefaultWebSocket;
 
 
 /**
@@ -20,81 +16,20 @@ import java.io.UnsupportedEncodingException;
  * 
  *
  */
-public class WebPrintStream extends PrintStream {
+public class WebPrintStream {
     
-    private static final String LINE_BREAK = "<br/>";
-
-    /**
-     * @param out
-     */
-    public WebPrintStream(OutputStream out) {
-
-	super(out);
-    }
-
-    /**
-     * @param fileName
-     * @throws FileNotFoundException
-     */
-    public WebPrintStream(String fileName) throws FileNotFoundException {
-
-	super(fileName);
-    }
-
-    /**
-     * @param file
-     * @throws FileNotFoundException
-     */
-    public WebPrintStream(File file) throws FileNotFoundException {
-
-	super(file);
-    }
-
-    /**
-     * @param out
-     * @param autoFlush
-     */
-    public WebPrintStream(OutputStream out, boolean autoFlush) {
-
-	super(out, autoFlush);
-    }
-
-    /**
-     * @param fileName
-     * @param csn
-     * @throws FileNotFoundException
-     * @throws UnsupportedEncodingException
-     */
-    public WebPrintStream(String fileName, String csn)
-	    throws FileNotFoundException, UnsupportedEncodingException {
-
-	super(fileName, csn);
-    }
-
-    /**
-     * @param file
-     * @param csn
-     * @throws FileNotFoundException
-     * @throws UnsupportedEncodingException
-     */
-    public WebPrintStream(File file, String csn) throws FileNotFoundException,
-	    UnsupportedEncodingException {
-
-	super(file, csn);
-    }
-
-    /**
-     * @param out
-     * @param autoFlush
-     * @param encoding
-     * @throws UnsupportedEncodingException
-     */
-    public WebPrintStream(OutputStream out, boolean autoFlush, String encoding)
-	    throws UnsupportedEncodingException {
-
-	super(out, autoFlush, encoding);
-    }
+    private static final String LINE_BREAK = "";//"<br/>";
     
+    private DefaultWebSocket socket;
+    
+    
+    /**
+     * @param socket
+     */
+    public WebPrintStream(DefaultWebSocket socket) {
+	this.socket = socket;
+    }
+
     /**
      * 
      * @param s
@@ -105,7 +40,7 @@ public class WebPrintStream extends PrintStream {
 	} else {
 	    s = s.replace(System.getProperty("line.separator"), LINE_BREAK);
 	}
-	super.print(s);
+	socket.send(s);
     }
     
     /**
@@ -113,8 +48,8 @@ public class WebPrintStream extends PrintStream {
      * @param obj 
      */
     public void print(Object obj) {
-	super.print(String.valueOf(obj)
-		.replace(System.getProperty("line.separator"), LINE_BREAK));
+	
+	print(String.valueOf(obj));
     }
     
     /**
@@ -124,7 +59,8 @@ public class WebPrintStream extends PrintStream {
      * character (<code>'\n'</code>).
      */
     public void println() {
-	newWebLine();
+	
+	newLine();
     }
 
     /**
@@ -135,9 +71,10 @@ public class WebPrintStream extends PrintStream {
      * @param x  The <code>boolean</code> to be printed
      */
     public void println(boolean x) {
+	
 	synchronized (this) {
 	    print(x);
-	    newWebLine();
+	    newLine();
 	}
     }
 
@@ -149,9 +86,10 @@ public class WebPrintStream extends PrintStream {
      * @param x  The <code>char</code> to be printed.
      */
     public void println(char x) {
+	
 	synchronized (this) {
 	    print(x);
-	    newWebLine();
+	    newLine();
 	}
     }
 
@@ -163,9 +101,10 @@ public class WebPrintStream extends PrintStream {
      * @param x  The <code>int</code> to be printed.
      */
     public void println(int x) {
+	
 	synchronized (this) {
 	    print(x);
-	    newWebLine();
+	    newLine();
 	}
     }
 
@@ -177,9 +116,10 @@ public class WebPrintStream extends PrintStream {
      * @param x  a The <code>long</code> to be printed.
      */
     public void println(long x) {
+	
 	synchronized (this) {
 	    print(x);
-	    newWebLine();
+	    newLine();
 	}
     }
 
@@ -191,9 +131,10 @@ public class WebPrintStream extends PrintStream {
      * @param x  The <code>float</code> to be printed.
      */
     public void println(float x) {
+	
 	synchronized (this) {
 	    print(x);
-	    newWebLine();
+	    newLine();
 	}
     }
 
@@ -205,9 +146,10 @@ public class WebPrintStream extends PrintStream {
      * @param x  The <code>double</code> to be printed.
      */
     public void println(double x) {
+	
 	synchronized (this) {
 	    print(x);
-	    newWebLine();
+	    newLine();
 	}
     }
 
@@ -219,9 +161,10 @@ public class WebPrintStream extends PrintStream {
      * @param x  an array of chars to print.
      */
     public void println(char x[]) {
+	
 	synchronized (this) {
 	    print(x);
-	    newWebLine();
+	    newLine();
 	}
     }
 
@@ -235,7 +178,7 @@ public class WebPrintStream extends PrintStream {
     public void println(String x) {
 	synchronized (this) {
 	    print(x);
-	    newWebLine();
+	    newLine();
 	}
     }
 
@@ -252,11 +195,12 @@ public class WebPrintStream extends PrintStream {
         String s = String.valueOf(x);
         synchronized (this) {
             print(s);
-            newWebLine();
+            newLine();
         }
     }
     
-    private void newWebLine() {
-	super.print(LINE_BREAK);
+    private void newLine() {
+	
+	print(LINE_BREAK);
     }
 }
