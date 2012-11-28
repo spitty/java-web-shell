@@ -16,7 +16,26 @@ function binding(){
 		return false;
 	});
 }
+var ws;
+function webSocketConnect() {
+	ws = new WebSocket("ws://localhost:8080/java-web-shell/WebSocketOutput/connect");
+	ws.onopen = function(event) {
+	};
+	ws.onmessage = function(event) {
+		echo (event.data);
+		window.scrollTo(0, document.body.scrollHeight);
+	};
+	ws.onclose = function(event) {
+		
+	};
+	ws.onerror = function(event) {
+		alert("Error!");
+	};
+}
+
+
 $(document).ready(binding);
+$(document).ready(webSocketConnect);
 /*
 jQuery(document).bind('keyup', 'up',function (evt){
 	
@@ -26,7 +45,27 @@ jQuery(document).bind('keyup', 'down',function (evt){
 	last_queries(0);
 	return false;
 });*/
-function execute(){
+
+function execute() {
+	var query = $("#query").val();
+	
+	switch(query){
+	case "":
+		echo(null, null, ">");
+		break;
+	case "clear":
+		storing(query);
+		echo();
+		$("#results").html("");
+		break;
+	default:
+		storing(query);
+		echo (query, null, '>');
+		ws.send(query);
+	};
+}
+
+function execute_old(){
 	var query = $("#query").val();
 	if (query){
 		storing(query);
