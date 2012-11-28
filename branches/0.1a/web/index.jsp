@@ -5,17 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="ru.ipccenter.webshell.server.*"%>
-<% 
-	request.getSession(true);
-	
-	if (session.getAttribute("shellSandbox") == null) {
-	    SingleThreadableShellSandbox sandbox = 
-		    new SingleThreadableShellSandbox();
-    	session.setAttribute("shellSandbox", sandbox);
-    	new Thread(sandbox).start();
-	}
-%>
+
 <!DOCTYPE html>
 <html>
 	<head>
