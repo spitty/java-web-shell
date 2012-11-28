@@ -10,14 +10,14 @@ package ru.ipccenter.webshell.server.shell;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
+import ru.ipccenter.webshell.server.shell.io.OutputToInputStreamConverter;
 import ru.ipccenter.webshell.server.shell.io.WebPrintStream;
-
-import com.sun.grizzly.websockets.DefaultWebSocket;
 
 
 /**
@@ -31,8 +31,8 @@ public class Shell extends JSGlobalObject {
     private static final long serialVersionUID = -2348308525920909035L;
     private static final int  PIPE_SIZE = 4096;
     
-//    private OutputToInputStreamConverter output;
-//    private OutputToInputStreamConverter error;
+    private OutputToInputStreamConverter output;
+    private OutputToInputStreamConverter error;
     
     private File curentDirectory;
 
@@ -40,9 +40,9 @@ public class Shell extends JSGlobalObject {
      * @throws IOException 
      * 
      */
-    public Shell(DefaultWebSocket socket) throws IOException {
+    public Shell() throws IOException {
 
-	initialize(socket);
+	initialize();
     }
 
     /**
@@ -50,11 +50,10 @@ public class Shell extends JSGlobalObject {
      * @param prototype
      * @throws IOException 
      */
-    public Shell(Scriptable scope, Scriptable prototype,
-	    	DefaultWebSocket socket) throws IOException {
+    public Shell(Scriptable scope, Scriptable prototype) throws IOException {
 
 	super(scope, prototype);
-	initialize(socket);
+	initialize();
     }
     
     /**
@@ -66,21 +65,21 @@ public class Shell extends JSGlobalObject {
 	super.process(source);
     }
     
-//    /**
-//     * @return outputStream
-//     */
-//    public final InputStream getOutputStream() {
-//    
-//        return output.getInput();
-//    }
+    /**
+     * @return outputStream
+     */
+    public final InputStream getOutputStream() {
     
-//    /**
-//     * @return errorStream
-//     */
-//    public final InputStream getErrorStream() {
-//    
-//        return error.getInput();
-//    }
+        return output.getInput();
+    }
+    
+    /**
+     * @return errorStream
+     */
+    public final InputStream getErrorStream() {
+    
+        return error.getInput();
+    }
     
 //    /**
 //     * @param inputStream задаваемое inputStream
@@ -223,13 +222,13 @@ public class Shell extends JSGlobalObject {
      * @throws IOException 
      * 
      */
-    private void initialize(DefaultWebSocket socket) throws IOException {
+    private void initialize() throws IOException {
 	
-//	output = new OutputToInputStreamConverter(PIPE_SIZE);
-//	error  = new OutputToInputStreamConverter(PIPE_SIZE);
+	output = new OutputToInputStreamConverter(PIPE_SIZE);
+	error  = new OutputToInputStreamConverter(PIPE_SIZE);
 	
-	stdout = new WebPrintStream(socket);
-	stderr = new WebPrintStream(socket);	
+	stdout = new WebPrintStream(output.getOutput());
+	stderr = new WebPrintStream(error.getOutput());	
 	
 	this.defineFunctionProperties(getBuiltinFuncts(),
 		JSGlobalObject.class, ScriptableObject.DONTENUM);
