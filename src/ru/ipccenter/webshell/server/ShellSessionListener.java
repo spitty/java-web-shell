@@ -33,6 +33,7 @@ public final class ShellSessionListener implements HttpSessionListener {
 	
 	SingleThreadableShellSandbox sandbox = 
 		new SingleThreadableShellSandbox();
+	
 	new Thread(sandbox).start();
 	
 	session.setAttribute(SHELL_ATTRIBUTE_NAME, sandbox);
@@ -49,12 +50,5 @@ public final class ShellSessionListener implements HttpSessionListener {
 		ShellContextListener.getShellsMap(session);
 	shells.get(session.getId()).exit();
 	shells.remove(session.getId());
-    }
-    
-    
-    public static SingleThreadableShellSandbox getShell(HttpSession s) {
-	
-	return (SingleThreadableShellSandbox)s
-			.getAttribute(SHELL_ATTRIBUTE_NAME);
     }
 }

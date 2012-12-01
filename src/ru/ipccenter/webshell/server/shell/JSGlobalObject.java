@@ -22,7 +22,7 @@ abstract class JSGlobalObject extends JSShell {
 
     private static final long serialVersionUID = -3380083016944253143L;
     private static final String[] BUILTIN_FUNCTS = 
-	{"cd", "pwd", "print", "help", "read"};
+	{"cd", "pwd", "print", "flush", "println", "help", "read"};
 
     /**
      * 
@@ -116,6 +116,32 @@ abstract class JSGlobalObject extends JSShell {
      * @param args
      * @param funct
      */
+    public static void flush(Context context, Scriptable obj,
+		Object[] args, Function funct) {
+
+	cast(obj).flush(args);
+    }
+    
+    /**
+     * 
+     * @param context
+     * @param obj
+     * @param args
+     * @param funct
+     */
+    public static void println(Context context, Scriptable obj,
+		Object[] args, Function funct) {
+
+	cast(obj).println(args);
+    }
+    
+    /**
+     * 
+     * @param context
+     * @param obj
+     * @param args
+     * @param funct
+     */
     public static void help(Context context, Scriptable obj,
 		Object[] args, Function funct) {
 
@@ -143,7 +169,7 @@ abstract class JSGlobalObject extends JSShell {
     protected void finalize() throws Throwable {
     
         super.finalize();
-    }
+    } 
     
     /**
      * 
@@ -162,7 +188,19 @@ abstract class JSGlobalObject extends JSShell {
      * @param args
      */
     protected abstract void print(Object[] args);
-
+    
+    /**
+     * 
+     * @param args
+     */
+    protected abstract void flush(Object[] args);
+    
+    /**
+     * 
+     * @param args
+     */
+    protected abstract void println(Object[] args);
+    
     /**
      * 
      * @param args
