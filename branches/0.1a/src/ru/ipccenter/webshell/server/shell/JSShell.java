@@ -88,7 +88,7 @@ abstract class JSShell extends ScriptableObject {
 		stderr.println(Context.toString(result));
 	    };
 	} catch (EcmaError ee) {
-	    stderr.print(ee.getErrorMessage());
+	    stderr.println(ee.getErrorMessage());
 	} catch (WrappedException we) {
 	    stderr.println(we.getWrappedException().toString());
 	} catch (EvaluatorException ee) {

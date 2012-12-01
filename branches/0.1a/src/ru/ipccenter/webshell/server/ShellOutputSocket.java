@@ -1,77 +1,57 @@
 package ru.ipccenter.webshell.server;
 
-import java.io.IOException;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.Map;
 
-import ru.ipccenter.webshell.server.shell.Shell;
+import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import com.sun.grizzly.websockets.DefaultWebSocket;
 import com.sun.grizzly.websockets.ProtocolHandler;
 import com.sun.grizzly.websockets.WebSocketListener;
 
 
-public class ShellOutputSocket extends DefaultWebSocket implements Runnable{
+public class ShellOutputSocket extends DefaultWebSocket {
 
-    final Lock sourceLock = new ReentrantLock();
-    final Condition newSource = sourceLock.newCondition(); 
+    private SingleThreadableShellSandbox shell;
     
-    volatile private boolean exit;
-    private String  source;
-    private Shell   shell;
-    
-    public ShellOutputSocket(ProtocolHandler arg0, WebSocketListener... arg1) {
+    public ShellOutputSocket(ServletContext context, ProtocolHandler ph,
+	    WebSocketListener... wsl) {
 
-	super(arg0, arg1);
+	super(ph, wsl);
+	
+	Map<String, SingleThreadableShellSandbox> shells = 
+		ShellContextListener.getShellsMap(context);
+	
+	String sessionId = getSessionId(getRequest(), shells);
+	if (sessionId != null) {
+	    shell = shells.get(sessionId);
+	    shell.setShellOutput(this);
+	} else {
+	    throw new RuntimeException("No session Id in the global Map");
+	}
+    }
+    
+    public SingleThreadableShellSandbox getShell() {
+	
+	return shell;
     }
 
-    @Override
-    public void run() {
+    private static String getSessionId(HttpServletRequest request,
+	    Map<String, SingleThreadableShellSandbox> shells) {
+	
+	String id = null;
+	
+	for (Cookie c: request.getCookies()) {
 
-	try {
-	    shell = new Shell(this);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    return;
-	}
-
-	while (!exit) {
-	    
-	    String sourceCopy;
-	    
-	    
-	    sourceLock.lock();
-	    try {
-		newSource.await();
-		sourceCopy = source;
-		shell.process(sourceCopy);
-	    } catch (InterruptedException e) {
-		e.printStackTrace();
-	    } finally {
-		sourceLock.unlock();
+	    //TODO: check the string constant
+	    if (c.getName().equals("JSESSIONID") 
+		    && shells.containsKey(c.getValue())) {
+		id = c.getValue();
+		break;
 	    }
 	}
 	
-	shell = null;
-    }
-    
-    public void process(String source) {
-	
-	if (shell == null) {
-	    return;
-	}
-
-	sourceLock.lock();
-	try {
-	    this.source = source;
-	    newSource.signal();
-	} finally {
-	    sourceLock.unlock();
-	}
-    }
-    
-    public void exit() {
-	exit = true;
+	return id;
     }
 }

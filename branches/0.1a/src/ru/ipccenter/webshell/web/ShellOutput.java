@@ -7,6 +7,8 @@
  */
 package ru.ipccenter.webshell.web;
 
+import javax.servlet.ServletContext;
+
 import ru.ipccenter.webshell.server.ShellOutputSocket;
 
 import com.sun.grizzly.tcp.Request;
@@ -25,6 +27,16 @@ import com.sun.grizzly.websockets.WebSocketListener;
  */
 public class ShellOutput extends WebSocketApplication {
 
+    private ServletContext servletContext;
+    
+    
+    public ShellOutput(ServletContext context) {
+
+	servletContext = context;
+    }
+    
+    
+    
     /**
      * 
      * @param protocolHandler
@@ -35,10 +47,8 @@ public class ShellOutput extends WebSocketApplication {
     public WebSocket createWebSocket(ProtocolHandler protocolHandler,
             WebSocketListener... listeners) {
 		
-	ShellOutputSocket socket = 
-		new ShellOutputSocket(protocolHandler, listeners);
-	new Thread(socket).start();
-	return socket;
+	return new ShellOutputSocket(servletContext,
+			protocolHandler, listeners);
     }
     
     /**
@@ -54,17 +64,16 @@ public class ShellOutput extends WebSocketApplication {
     
     @Override
     public void onConnect(WebSocket socket) {
-	System.out.println("connect");
+//	System.out.println("connected");
     }
     
     @Override
     public void onMessage(WebSocket socket, String text) {
-	((ShellOutputSocket)socket).process(text);
+	((ShellOutputSocket)socket).getShell().process(text);
     }
     
     @Override
     public void onClose(WebSocket socket, DataFrame frame) {
-	System.out.println("close");
-	((ShellOutputSocket)socket).exit();
+//	System.out.println("closed");s
     }
 }

@@ -7,6 +7,8 @@
  */
 package ru.ipccenter.webshell.server.shell.io;
 
+import java.io.Flushable;
+
 import com.sun.grizzly.websockets.DefaultWebSocket;
 
 
@@ -16,18 +18,22 @@ import com.sun.grizzly.websockets.DefaultWebSocket;
  * 
  *
  */
-public class WebPrintStream {
+public class WebPrintStream implements Flushable {
     
-    private static final String LINE_BREAK = "";//"<br/>";
+    private static final String LINE_BREAK = "<br/>";
+    private static final int    BUFER_SIZE = 4096;
     
     private DefaultWebSocket socket;
+    private StringBuffer     bufer;
     
     
     /**
      * @param socket
      */
     public WebPrintStream(DefaultWebSocket socket) {
+	
 	this.socket = socket;
+	bufer = new StringBuffer(BUFER_SIZE);
     }
 
     /**
@@ -40,7 +46,17 @@ public class WebPrintStream {
 	} else {
 	    s = s.replace(System.getProperty("line.separator"), LINE_BREAK);
 	}
-	socket.send(s);
+	bufer.append(s);
+    }
+    
+    /**
+     * 
+     */
+    @Override
+    public void flush() {
+
+	socket.send(bufer.toString());
+	bufer.setLength(0);
     }
     
     /**
@@ -201,6 +217,6 @@ public class WebPrintStream {
     
     private void newLine() {
 	
-	print(LINE_BREAK);
+	flush();
     }
 }
