@@ -18,7 +18,7 @@ function binding(){
 }
 var ws;
 function webSocketConnect() {
-	ws = new WebSocket("ws://localhost:8080/java-web-shell/WebSocketOutput/connect");
+	ws = new WebSocket("ws://localhost:8080/java-web-shell//ShellOutputRegistrator/connect");
 	ws.onopen = function(event) {
 	};
 	ws.onmessage = function(event) {

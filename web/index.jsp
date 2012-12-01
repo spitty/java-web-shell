@@ -5,18 +5,11 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="ru.ipccenter.webshell.server.*"%>
-<% 
+<%@page import="java.util.Map" %>
+<%
 	request.getSession(true);
-	
-	if (session.getAttribute("shellSandbox") == null) {
-	    SingleThreadableShellSandbox sandbox = 
-		    new SingleThreadableShellSandbox();
-    	session.setAttribute("shellSandbox", sandbox);
-    	new Thread(sandbox).start();
-	}
 %>
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
 	<head>
 		<link rel='stylesheet' type='text/css' href='res/style.css'>
