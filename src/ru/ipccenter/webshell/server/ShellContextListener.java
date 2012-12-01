@@ -31,8 +31,8 @@ public final class ShellContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
 	
 	ServletContext context = sce.getServletContext();
-	HashMap<String, ShellOutputSocket> shells =
-		new HashMap <String, ShellOutputSocket>(); 
+	HashMap<String, SingleThreadableShellSandbox> shells =
+		new HashMap <String, SingleThreadableShellSandbox>(); 
 	context.setAttribute(SHELLS_ATTRIBUTE_NAME,
 		Collections.synchronizedMap(shells));
 	

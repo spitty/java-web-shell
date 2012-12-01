@@ -188,7 +188,25 @@ public class Shell extends JSGlobalObject {
     	    }
 	    stdout.print(Context.toString(args[i]));
 	}
-	stdout.println();
+    }
+    
+    /**
+     * 
+     * @param args
+     */
+    protected void flush(Object[] args) {
+	
+	stdout.flush();
+    }
+    
+    /**
+     * 
+     * @param args
+     */
+    protected void println(Object[] args) {
+	
+	print(args);
+	stdout.flush();
     }
 
     /**

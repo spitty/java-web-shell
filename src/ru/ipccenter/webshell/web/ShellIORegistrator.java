@@ -9,18 +9,18 @@ import javax.servlet.http.HttpServlet;
 import com.sun.grizzly.websockets.WebSocketEngine;
 
 /**
- * Servlet implementation class ShellOutputRegistrator
+ * Servlet implementation class ShellIORegistrator
  */
-@WebServlet("/ShellOutputRegistrator")
-public class ShellOutputRegistrator extends HttpServlet {
+@WebServlet("/ShellIORegistrator")
+public class ShellIORegistrator extends HttpServlet {
 	
     private static final long serialVersionUID = -7109156562388653637L;
-    private ShellOutput app;
+    private ShellIO app;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ShellOutputRegistrator() {
+    public ShellIORegistrator() {
         super();
     }
 
@@ -29,7 +29,7 @@ public class ShellOutputRegistrator extends HttpServlet {
      */
     public void init(ServletConfig config) throws ServletException {
 
-	app = new ShellOutput(config.getServletContext());
+	app = new ShellIO(config.getServletContext());
 	System.out.println(config.getServletContext().getContextPath());
 	WebSocketEngine.getEngine().register(app);
     }

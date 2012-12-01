@@ -1,6 +1,6 @@
 /**
  * 
- * ShellOutput.java
+ * ShellIO.java
  *
  * 11:43:36
  *
@@ -9,7 +9,7 @@ package ru.ipccenter.webshell.web;
 
 import javax.servlet.ServletContext;
 
-import ru.ipccenter.webshell.server.ShellOutputSocket;
+import ru.ipccenter.webshell.server.ShellIOSocket;
 
 import com.sun.grizzly.tcp.Request;
 import com.sun.grizzly.websockets.DataFrame;
@@ -25,12 +25,12 @@ import com.sun.grizzly.websockets.WebSocketListener;
  * 
  *
  */
-public class ShellOutput extends WebSocketApplication {
+public class ShellIO extends WebSocketApplication {
 
     private ServletContext servletContext;
     
     
-    public ShellOutput(ServletContext context) {
+    public ShellIO(ServletContext context) {
 
 	servletContext = context;
     }
@@ -47,7 +47,7 @@ public class ShellOutput extends WebSocketApplication {
     public WebSocket createWebSocket(ProtocolHandler protocolHandler,
             WebSocketListener... listeners) {
 		
-	return new ShellOutputSocket(servletContext,
+	return new ShellIOSocket(servletContext,
 			protocolHandler, listeners);
     }
     
@@ -69,7 +69,7 @@ public class ShellOutput extends WebSocketApplication {
     
     @Override
     public void onMessage(WebSocket socket, String text) {
-	((ShellOutputSocket)socket).getShell().process(text);
+	((ShellIOSocket)socket).getShell().process(text);
     }
     
     @Override

@@ -11,11 +11,11 @@ import com.sun.grizzly.websockets.ProtocolHandler;
 import com.sun.grizzly.websockets.WebSocketListener;
 
 
-public class ShellOutputSocket extends DefaultWebSocket {
+public class ShellIOSocket extends DefaultWebSocket {
 
     private SingleThreadableShellSandbox shell;
     
-    public ShellOutputSocket(ServletContext context, ProtocolHandler ph,
+    public ShellIOSocket(ServletContext context, ProtocolHandler ph,
 	    WebSocketListener... wsl) {
 
 	super(ph, wsl);
