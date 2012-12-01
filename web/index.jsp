@@ -5,8 +5,11 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
-<!DOCTYPE html>
+<%@page import="java.util.Map" %>
+<%
+	request.getSession(true);
+%>
+<!DOCTYPE html> 
 <html>
 	<head>
 		<link rel='stylesheet' type='text/css' href='res/style.css'>
