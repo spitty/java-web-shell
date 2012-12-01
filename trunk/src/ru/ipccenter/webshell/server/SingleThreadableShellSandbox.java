@@ -44,13 +44,26 @@ public class SingleThreadableShellSandbox implements Runnable {
      * 
      * @param socket
      */
-    public synchronized void setShellOutput(DefaultWebSocket socket) {
+    public void setShellOutput(DefaultWebSocket socket) {
 	
-	if (shell == null) {
-	    return;
+	synchronized (shell) {
+	    if (shell == null) {
+		return;
+	    }
+		
+	    shell.setOutput(socket);
 	}
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public String getCurentDirectoryPath() {
 	
-	shell.setOutput(socket);
+	synchronized (shell) {
+	    return shell.getCurentDirectoryPath();
+	}
     }
 
     /**
@@ -75,7 +88,9 @@ public class SingleThreadableShellSandbox implements Runnable {
 	    try {
 		newSource.await();
 		sourceCopy = source;
-		shell.process(sourceCopy);
+		synchronized (shell) {
+		    shell.process(sourceCopy);
+		}
 	    } catch (InterruptedException e) {
 		e.printStackTrace();
 	    } finally {

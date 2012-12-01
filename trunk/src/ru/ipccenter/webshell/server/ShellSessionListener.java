@@ -51,4 +51,15 @@ public final class ShellSessionListener implements HttpSessionListener {
 	shells.get(session.getId()).exit();
 	shells.remove(session.getId());
     }
+    
+    /**
+     * 
+     * @param s
+     * @return
+     */
+    public static SingleThreadableShellSandbox getShellSandbox(HttpSession s) {
+	
+	return (SingleThreadableShellSandbox)s
+			.getAttribute(SHELL_ATTRIBUTE_NAME);
+    }
 }
