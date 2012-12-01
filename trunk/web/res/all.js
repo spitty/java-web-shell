@@ -18,7 +18,7 @@ function binding(){
 }
 var ws;
 function webSocketConnect() {
-	ws = new WebSocket("ws://localhost:8080/java-web-shell//ShellOutputRegistrator/connect");
+	ws = new WebSocket("ws://localhost:8080/java-web-shell/ShellIORegistrator/connect");
 	ws.onopen = function(event) {
 	};
 	ws.onmessage = function(event) {
@@ -136,4 +136,5 @@ function storing(query){
 	store.set("q["+last+"]", query);
 	last++;
 	store.set("last", last);
+	lastQuery = last;
 }
