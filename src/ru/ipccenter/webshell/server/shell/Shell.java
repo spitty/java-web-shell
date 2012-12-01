@@ -55,7 +55,26 @@ public class Shell extends JSGlobalObject {
 	initialize();
     }
     
+    /**
+     * 
+     * @return
+     */
+    public String getCurentDirectoryPath() {
+	
+	String path = null;
+	
+	try {
+	    path = curentDirectory.getCanonicalPath();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	return path;
+    }
     
+    /**
+     * 
+     * @param socket
+     */
     public void setOutput(DefaultWebSocket socket) {
 	
 	stdout = new WebPrintStream(socket);
