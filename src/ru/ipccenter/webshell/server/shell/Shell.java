@@ -29,7 +29,6 @@ import com.sun.grizzly.websockets.DefaultWebSocket;
 public class Shell extends JSGlobalObject {
 
     private static final long serialVersionUID = -2348308525920909035L;
-    private static final int  PIPE_SIZE = 4096;
     
 //    private OutputToInputStreamConverter output;
 //    private OutputToInputStreamConverter error;
@@ -40,9 +39,9 @@ public class Shell extends JSGlobalObject {
      * @throws IOException 
      * 
      */
-    public Shell(DefaultWebSocket socket) throws IOException {
+    public Shell() throws IOException {
 
-	initialize(socket);
+	initialize();
     }
 
     /**
@@ -50,11 +49,17 @@ public class Shell extends JSGlobalObject {
      * @param prototype
      * @throws IOException 
      */
-    public Shell(Scriptable scope, Scriptable prototype,
-	    	DefaultWebSocket socket) throws IOException {
+    public Shell(Scriptable scope, Scriptable prototype) throws IOException {
 
 	super(scope, prototype);
-	initialize(socket);
+	initialize();
+    }
+    
+    
+    public void setOutput(DefaultWebSocket socket) {
+	
+	stdout = new WebPrintStream(socket);
+	stderr = new WebPrintStream(socket);	
     }
     
     /**
@@ -223,13 +228,7 @@ public class Shell extends JSGlobalObject {
      * @throws IOException 
      * 
      */
-    private void initialize(DefaultWebSocket socket) throws IOException {
-	
-//	output = new OutputToInputStreamConverter(PIPE_SIZE);
-//	error  = new OutputToInputStreamConverter(PIPE_SIZE);
-	
-	stdout = new WebPrintStream(socket);
-	stderr = new WebPrintStream(socket);	
+    private void initialize() throws IOException {
 	
 	this.defineFunctionProperties(getBuiltinFuncts(),
 		JSGlobalObject.class, ScriptableObject.DONTENUM);

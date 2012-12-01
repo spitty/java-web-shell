@@ -1,22 +1,18 @@
 package ru.ipccenter.webshell.web;
 
-import java.io.IOException;
-
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.sun.grizzly.websockets.WebSocketEngine;
 
 /**
- * Servlet implementation class WebSocketOutput
+ * Servlet implementation class ShellOutputRegistrator
  */
-@WebServlet("/WebSocketOutput")
-public class WebSocketOutput extends HttpServlet {
+@WebServlet("/ShellOutputRegistrator")
+public class ShellOutputRegistrator extends HttpServlet {
 	
     private static final long serialVersionUID = -7109156562388653637L;
     private ShellOutput app;
@@ -24,7 +20,7 @@ public class WebSocketOutput extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public WebSocketOutput() {
+    public ShellOutputRegistrator() {
         super();
     }
 
@@ -33,7 +29,8 @@ public class WebSocketOutput extends HttpServlet {
      */
     public void init(ServletConfig config) throws ServletException {
 
-	app = new ShellOutput();
+	app = new ShellOutput(config.getServletContext());
+	System.out.println(config.getServletContext().getContextPath());
 	WebSocketEngine.getEngine().register(app);
     }
     
@@ -46,12 +43,5 @@ public class WebSocketOutput extends HttpServlet {
 	if (app != null) {
 	    WebSocketEngine.getEngine().unregister(app);
 	}
-    }
-    
-    @Override
-    protected void doGet(HttpServletRequest request,
-	    HttpServletResponse response) throws ServletException, IOException {
-	response.getWriter().println("hello");
-	response.getWriter().close();
     }
 }
