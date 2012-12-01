@@ -18,7 +18,7 @@ function binding(){
 }
 var ws;
 function webSocketConnect() {
-	ws = new WebSocket("ws://localhost:8080/java-web-shell/ShellIORegistrator/connect");
+	ws = new WebSocket("ws://localhost:8080/java-web-shell/ShellIORegistrator/");
 	ws.onopen = function(event) {
 	};
 	ws.onmessage = function(event) {
@@ -106,7 +106,7 @@ function echo(text, query, delim){
 	else
 		delim = delim+" ";
 	if (text != "") {
-		$("#results").append("<div class='result'>"+delim+text+"</div>");
+		$("#results").append("<div class='result'>"+(delim+text).split("<").join("&lt;").split(">").join("&gt;")+"</div>");
 	}; 
 	$("#query").val(query);
 }
