@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSessionListener;
 @WebListener
 public final class ShellSessionListener implements HttpSessionListener {
 
+    private final static String SHELL_ATTRIBUTE_NAME = "ShellSandbox";
     
     /**
      * Default constructor. Does nothing.
@@ -34,6 +35,8 @@ public final class ShellSessionListener implements HttpSessionListener {
 		new SingleThreadableShellSandbox();
 	
 	new Thread(sandbox).start();
+	
+	session.setAttribute(SHELL_ATTRIBUTE_NAME, sandbox);
 	shells.put(session.getId(), sandbox);
     }
 
